@@ -1,0 +1,145 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: campi-api-deployment
+  labels:
+    app: campi-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: campi-api
+  template:
+    metadata:
+      labels:
+        app: campi-api
+        tier: backend
+        version: v1
+    spec:
+      containers:
+      - name: campi-api-container 
+        image: hjaiejhoussem/campi-api
+        ports:
+        - containerPort: 3000
+        env:
+        - name: MONGODB_HOST
+          value: "campi-db-service"
+        - name: MONGODB_USER
+          value: "myuser"
+        - name: MONGODB_PASSWORD
+          value: "mypassword"
+        - name: MONGODB_PORT
+          value: "27017"
+        - name: MONGODB_DATABASE
+          value: "auser_microservice"
+        - name: MONGODB_AUTH_SOURCE
+          value: "admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: campi-api-service
+spec:
+  selector:
+    app: campi-api
+  ports:
+  - port: 4000
+    targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: campi-db-deployment
+  labels:
+    app: campi-db-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: campi-db
+  template:
+    metadata:
+      labels:
+        app: campi-db
+        tier: bd
+    spec:
+      containers:
+      - name: campi-db-container 
+        image: mongo:6-jammy
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: "myuser"
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: "mypassword"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: campi-db-service
+spec:
+  selector:
+    app: campi-db
+  ports:
+  - port: 27017
+    targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: campi-frontend-deployment
+  labels:
+    app: campi-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: campi-frontend
+  template:
+    metadata:
+      labels:
+        app: campi-frontend
+        tier: frontend
+        version: v1
+    spec:
+      containers:
+      - name: campi-frontend-container 
+        image: hjaiejhoussem/campi-frontend:1.0.19
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: campi-frontend-service
+spec:
+  selector:
+    app: campi-frontend
+  ports:
+  - port: 4001
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: campi-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: campi-frontend-service
+            port:
+              number: 4001
+      - pathType: Prefix
+        path: /user
+        backend:
+          service:
+            name: campi-api-service
+            port:
+              number: 4000

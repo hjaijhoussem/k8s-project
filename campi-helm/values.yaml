@@ -1,0 +1,56 @@
+# Global configuration (optional)
+global:
+  imagePullPolicy: IfNotPresent
+  replicas: 1
+
+ingress:
+  name: campi-ingress
+  className: nginx  
+
+
+# Frontend service
+frontend:
+  replicas: 1
+  image:
+    repository: hjaiejhoussem
+    name: campi-frontend
+    tag: "1.0.19"
+  servicePort: 4001
+  containerPort: 80
+
+# Backend service
+backend:
+  replicas: 1
+  image:
+    repository: hjaiejhoussem
+    name: campi-api
+  servicePort: 4000
+  containerPort: 3000
+  envVariables:
+  - name: MONGODB_HOST
+    value: "campi-db-service"
+  - name: MONGODB_USER
+    value: "myuser"
+  - name: MONGODB_PASSWORD
+    value: "mypassword"
+  - name: MONGODB_PORT
+    value: "27017"
+  - name: MONGODB_DATABASE
+    value: "auser_microservice"
+  - name: MONGODB_AUTH_SOURCE
+    value: "admin"
+
+# Database service
+database:
+  replicas: 1
+  image:
+      name: mongo
+      tag: "6-jammy"
+  servicePort: 27017
+  containerPort: 27017
+  envVariables:
+  - name: MONGO_INITDB_ROOT_USERNAME
+    value: "myuser"
+  - name: MONGO_INITDB_ROOT_PASSWORD
+    value: "mypassword"
+

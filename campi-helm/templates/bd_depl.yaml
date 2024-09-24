@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-db-deployment
+  labels:
+    
+spec:
+  replicas: {{ .Values.database.replicas }}
+  selector:
+    matchLabels:
+      {{- include "database.labels" . | indent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "database.labels" . | indent 8 }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-db-container 
+        image: "{{ .Values.database.image.name }}:{{ .Values.database.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.database.containerPort }}
+        env:
+        {{- include "db.envVars" . | indent 8 }}

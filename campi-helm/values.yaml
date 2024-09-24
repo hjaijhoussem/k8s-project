@@ -20,7 +20,7 @@ frontend:
 
 # Backend service
 backend:
-  replicas: 1
+  replicas: 2
   image:
     repository: hjaiejhoussem
     name: campi-api

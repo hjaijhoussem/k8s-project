@@ -61,7 +61,7 @@ vault:
   version: "v2"
   secretName: "vault-token"
   secretKey: "token"
-  targetSecret: "mongo_db_secret"
+  targetSecret: "mongo-db-secret"
 
 
 

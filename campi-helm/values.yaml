@@ -28,17 +28,11 @@ backend:
   containerPort: 3000
   envVariables:
   - name: MONGODB_HOST
-    value: "campi-db-service"
   - name: MONGODB_USER
-    value: "myuser"
   - name: MONGODB_PASSWORD
-    value: "mypassword"
   - name: MONGODB_PORT
-    value: "27017"
   - name: MONGODB_DATABASE
-    value: "auser_microservice"
   - name: MONGODB_AUTH_SOURCE
-    value: "admin"
 
 # Database service
 database:
@@ -50,9 +44,7 @@ database:
   containerPort: 27017
   envVariables:
   - name: MONGO_INITDB_ROOT_USERNAME
-    value: "myuser"
   - name: MONGO_INITDB_ROOT_PASSWORD
-    value: "mypassword"
 
 # vault integration
 vault:

@@ -20,13 +20,4 @@ spec:
         ports:
         - containerPort: {{ .Values.database.containerPort }}
         env:
-          - name: MONGO_INITDB_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.vault.targetSecret }}
-                key: MONGO_INITDB_ROOT_USERNAME
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Values.vault.targetSecret }}
-                key: MONGO_INITDB_ROOT_PASSWORD
+        {{- include "db.envVars" . | indent 8 }}

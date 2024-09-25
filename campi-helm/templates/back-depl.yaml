@@ -16,8 +16,37 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-api-container 
-        image: "{{ .Values.backend.image.repository}}/{{ .Values.backend.image.name }}"
+        image: "{{ .Values.backend.image.repository }}/{{ .Values.backend.image.name }}"
         ports:
         - containerPort: {{ .Values.backend.containerPort }}
         env:
-        {{- include "back.envVars" . | indent 8 }}
+        - name: MONGODB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.vault.targetSecret }}
+              key: MONGODB_HOST
+        - name: MONGODB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.vault.targetSecret }}
+              key: MONGODB_USER
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.vault.targetSecret }}
+              key: MONGODB_PASSWORD
+        - name: MONGODB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.vault.targetSecret }}
+              key: MONGODB_PORT
+        - name: MONGODB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.vault.targetSecret }}
+              key: MONGODB_DATABASE
+        - name: MONGODB_AUTH_SOURCE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.vault.targetSecret }}
+              key: MONGODB_AUTH_SOURCE

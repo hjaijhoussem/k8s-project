@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-db-deployment
   labels:
-    
+    {{- include "database.labels" . | indent 4 }}
 spec:
   replicas: {{ .Values.database.replicas }}
   selector:
@@ -20,4 +20,13 @@ spec:
         ports:
         - containerPort: {{ .Values.database.containerPort }}
         env:
-        {{- include "db.envVars" . | indent 8 }}
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.vault.targetSecret }}
+                key: MONGO_INITDB_ROOT_USERNAME
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.vault.targetSecret }}
+                key: MONGO_INITDB_ROOT_PASSWORD

@@ -6,7 +6,7 @@ version: {{ .Chart.AppVersion }}
 
 {{- /* Function for database environment variables in the external service */ -}}
 {{- define "back-es.envVars" -}}
-{{- range .Values.database.envVariables }}
+{{- range .Values.backend.envVariables }}
   - secretKey: {{ .name }}
     remoteRef:
       key: kv/campi

@@ -7,10 +7,10 @@ version: {{ .Chart.AppVersion }}
 {{- /* Function for database environment variables in the external service */ -}}
 {{- define "back-es.envVars" -}}
 {{- range .Values.backend.envVariables }}
-  - secretKey: {{ .name }}
+  - secretKey: {{ . }}
     remoteRef:
       key: kv/campi
-      property: {{ .name }}
+      property: {{ . }}
 {{- end }}
 {{- end -}}
 
@@ -35,11 +35,11 @@ version: {{ .Chart.AppVersion }}
 {{- define "db.envVars" -}}
 {{- $targetSecret := include "vault.targetSecret" . }}
 {{- range .Values.database.envVariables }}
-  - name: {{ .name }}
+  - name: {{ . }}
     valueFrom:
       secretKeyRef:
         name: {{ $targetSecret }} 
-        key: {{ .name }}
+        key: {{ . }}
 {{- end }}
 {{- end -}}
 
@@ -47,20 +47,20 @@ version: {{ .Chart.AppVersion }}
 {{- define "back.envVars" -}}
 {{- $targetSecret := include "vault.targetSecret" . }}
 {{- range .Values.backend.envVariables }}
-  - name: {{ .name }}
+  - name: {{ . }}
     valueFrom:
       secretKeyRef:
         name: {{ $targetSecret }}
-        key: {{ .name }}
+        key: {{ . }}
 {{- end }}
 {{- end -}}
 
 {{- /* Function for database environment variables in the external service */ -}}
 {{- define "bd-es.envVars" -}}
 {{- range .Values.database.envVariables }}
-  - secretKey: {{ .name }}
+  - secretKey: {{ . }}
     remoteRef:
       key: kv/campi
-      property: {{ .name }}
+      property: {{ . }}
 {{- end }}
 {{- end -}}

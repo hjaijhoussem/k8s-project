@@ -27,12 +27,12 @@ backend:
   servicePort: 4000
   containerPort: 3000
   envVariables:
-  - name: MONGODB_HOST
-  - name: MONGODB_USER
-  - name: MONGODB_PASSWORD
-  - name: MONGODB_PORT
-  - name: MONGODB_DATABASE
-  - name: MONGODB_AUTH_SOURCE
+  - MONGODB_HOST
+  - MONGODB_USER
+  - MONGODB_PASSWORD
+  - MONGODB_PORT
+  - MONGODB_DATABASE
+  - MONGODB_AUTH_SOURCE
 
 # Database service
 database:
@@ -43,8 +43,8 @@ database:
   servicePort: 27017
   containerPort: 27017
   envVariables:
-  - name: MONGO_INITDB_ROOT_USERNAME
-  - name: MONGO_INITDB_ROOT_PASSWORD
+  - MONGO_INITDB_ROOT_USERNAME
+  - MONGO_INITDB_ROOT_PASSWORD
 
 # vault integration
 vault:
